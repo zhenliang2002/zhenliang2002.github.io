@@ -275,7 +275,7 @@ def index_page(posts):
       <h2>Writing</h2>
       <span class="count">0</span>
     </div>
-    <p class="empty">No posts yet.</p>
+    <p class="empty">—</p>
   </section>"""
     body = """<main class="archive-main">
 {listing}

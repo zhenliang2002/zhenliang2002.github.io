@@ -374,17 +374,13 @@ main { width: var(--wrap); margin: 0 auto; }
 
 /* ── archive-first layout ─────────────────── */
 
-.archive-main { padding: 96px 0 120px; }
+.archive-main { padding: 84px 0 120px; }
 
 .archive .section-head { border-top: none; padding-top: 0; }
 
 .empty {
   margin: 0;
-  padding: 28px 0 0;
-  border-top: 1px solid var(--line);
-  font-family: var(--mono);
-  font-size: 12px;
-  letter-spacing: .12em;
-  text-transform: uppercase;
+  padding: 24px 0 0;
+  font-size: 15px;
   color: var(--fg-3);
 }
