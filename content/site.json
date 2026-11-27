@@ -1,11 +1,8 @@
 {
   "title": "Notes",
   "url": "https://zhenliang2002.github.io",
-  "headline": "记录 Agent 后训练、长上下文与评测的一手经验。",
-  "lede": "这里放研究笔记、工程日志，以及一些失败过的尝试。不写论文摘要，不写流水账。",
   "nav": [
     { "label": "Writing", "href": "/#writing" },
-    { "label": "About", "href": "/about.html" },
     { "label": "RSS", "href": "/feed.xml" }
   ]
 }

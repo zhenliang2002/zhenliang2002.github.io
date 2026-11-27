@@ -195,13 +195,13 @@ def layout(title, description, body, canonical="/", current=""):
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>{title}</title>
-<meta name="description" content="{description}">
+{description_tag}
 <link rel="canonical" href="{site}{canonical}">
 <link rel="alternate" type="application/rss+xml" title="{title}" href="/feed.xml">
 <link rel="icon" href="{favicon}">
 <link rel="stylesheet" href="/assets/style.css">
 <meta property="og:title" content="{title}">
-<meta property="og:description" content="{description}">
+{description_tag}
 <meta property="og:type" content="{ogtype}">
 <meta property="og:url" content="{site}{canonical}">
 </head>
@@ -217,14 +217,17 @@ def layout(title, description, body, canonical="/", current=""):
   <span>© {year}</span>
   <nav>
     <a href="/feed.xml">RSS</a>
-    <a href="/about.html">About</a>
+    <a href="/#writing">Writing</a>
   </nav>
 </footer>
 </body>
 </html>
 """.format(
         title=title,
-        description=description,
+        description_tag=(
+            '<meta name="description" content="%s">\n<meta property="og:description" content="%s">'
+            % (html.escape(description), html.escape(description))
+            if description else ""),
         site=SITE["url"],
         canonical=canonical,
         favicon=FAVICON,
@@ -236,10 +239,11 @@ def layout(title, description, body, canonical="/", current=""):
 
 
 def index_page(posts):
-    rows = []
-    for post in posts:
-        rows.append(
-            """      <li class="post-row">
+    if posts:
+        rows = []
+        for post in posts:
+            rows.append(
+                """      <li class="post-row">
         <a href="/posts/{slug}.html">
           <time class="date" datetime="{iso}">{date}</time>
           <div>
@@ -249,43 +253,34 @@ def index_page(posts):
           <span class="arrow" aria-hidden="true">→</span>
         </a>
       </li>""".format(
-                slug=post["slug"],
-                iso=post["date"],
-                date=zh_date(post["date"], dot=True),
-                title=html.escape(post["title"]),
-                summary=html.escape(post["summary"]),
+                    slug=post["slug"],
+                    iso=post["date"],
+                    date=zh_date(post["date"], dot=True),
+                    title=html.escape(post["title"]),
+                    summary=html.escape(post["summary"]),
+                )
             )
-        )
-    latest = zh_date(posts[0]["date"], dot=True) if posts else "—"
-    body = """<main>
-  <section class="hero">
-    <p class="eyebrow">Notes · 2026</p>
-    <h1>{headline}</h1>
-    <p class="lede">{lede}</p>
-    <div class="meta">
-      <div>文章<b>{count}</b></div>
-      <div>最近更新<b>{latest}</b></div>
-    </div>
-  </section>
-
-  <section id="writing">
+        listing = """  <section id="writing" class="archive">
     <div class="section-head">
       <h2>Writing</h2>
-      <span class="count">{count} 篇</span>
+      <span class="count">{count}</span>
     </div>
     <ul class="post-list">
 {rows}
     </ul>
-  </section>
-</main>""".format(
-        title=SITE["title"],
-        headline=html.escape(SITE["headline"]),
-        lede=html.escape(SITE["lede"]),
-        count=len(posts),
-        latest=latest,
-        rows="\n".join(rows),
-    )
-    return layout(SITE["title"], SITE["lede"], body, "/")
+  </section>""".format(count=len(posts), rows="\n".join(rows))
+    else:
+        listing = """  <section id="writing" class="archive">
+    <div class="section-head">
+      <h2>Writing</h2>
+      <span class="count">0</span>
+    </div>
+    <p class="empty">No posts yet.</p>
+  </section>"""
+    body = """<main class="archive-main">
+{listing}
+</main>""".format(listing=listing)
+    return layout(SITE["title"], "", body, "/")
 
 
 def post_page(posts, index):
@@ -321,21 +316,6 @@ def post_page(posts, index):
     )
 
 
-def about_page():
-    raw = open(os.path.join(CONTENT, "pages", "about.md"), encoding="utf-8").read()
-    meta, body = split_front_matter(raw)
-    links = ""
-    content = """<main>
-  <section class="about">
-    <h1>{title}</h1>
-    <div class="prose">
-{html}
-    </div>
-  </section>
-</main>""".format(title=html.escape(meta.get("title", "关于")), html=markdown(body), links=links)
-    return layout("关于 — %s" % SITE["title"], SITE["lede"], content, "/about.html", current="about.html")
-
-
 def feed(posts):
     items = []
     for post in posts:
@@ -356,16 +336,16 @@ def feed(posts):
 <channel>
   <title>{title}</title>
   <link>{site}</link>
-  <description>{lede}</description>
+  <description>{title}</description>
   <language>zh-CN</language>
 {items}
 </channel>
 </rss>
-""".format(title=SITE["title"], site=SITE["url"], lede=html.escape(SITE["lede"]), items="\n".join(items))
+""".format(title=SITE["title"], site=SITE["url"], items="\n".join(items))
 
 
 def sitemap(posts):
-    urls = ["/", "/about.html"] + ["/posts/%s.html" % p["slug"] for p in posts]
+    urls = ["/"] + ["/posts/%s.html" % p["slug"] for p in posts]
     body = "".join("  <url><loc>%s%s</loc></url>\n" % (SITE["url"], u) for u in urls)
     return '<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n%s</urlset>\n' % body
 
@@ -380,7 +360,6 @@ def write(path, text):
 def main():
     posts = load_posts()
     write("index.html", index_page(posts))
-    write("about.html", about_page())
     for i, post in enumerate(posts):
         write(os.path.join("posts", post["slug"] + ".html"), post_page(posts, i))
     write("feed.xml", feed(posts))
