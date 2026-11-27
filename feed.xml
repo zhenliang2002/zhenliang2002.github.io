@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0">
+<channel>
+  <title>Notes</title>
+  <link>https://zhenliang2002.github.io</link>
+  <description>这里放研究笔记、工程日志，以及一些失败过的尝试。不写论文摘要，不写流水账。</description>
+  <language>zh-CN</language>
+  <item>
+    <title>开始记录</title>
+    <link>https://zhenliang2002.github.io/posts/start.html</link>
+    <guid>https://zhenliang2002.github.io/posts/start.html</guid>
+    <pubDate>Tue, 10 Nov 2026 00:00:00 +0800</pubDate>
+    <description>这个博客要写什么、不写什么。</description>
+  </item>
+</channel>
+</rss>

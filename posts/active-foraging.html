@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>为什么长文本理解应该变成一次“主动搜寻” — Zhenliang Zhang</title>
+<meta name="description" content="百万 token 的上下文窗口解决的是“能不能装下”，不是“能不能找到”。这是 SCOUT 的出发点。">
+<link rel="canonical" href="https://zhenliang2002.github.io/posts/active-foraging.html">
+<link rel="alternate" type="application/rss+xml" title="张珍梁" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='Helvetica,Arial' font-size='16' font-weight='600' fill='%23fff' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<meta property="og:title" content="为什么长文本理解应该变成一次“主动搜寻” — Zhenliang Zhang">
+<meta property="og:description" content="百万 token 的上下文窗口解决的是“能不能装下”，不是“能不能找到”。这是 SCOUT 的出发点。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhenliang2002.github.io/posts/active-foraging.html">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="/">Zhenliang Zhang <span>· 张珍梁</span></a>
+    <nav class="nav"><a href="/#writing">Writing</a><a href="/about.html">About</a><a href="/feed.xml">RSS</a></nav>
+  </div>
+</header>
+<main>
+  <article class="article">
+    <a class="back" href="/#writing">← Writing</a>
+    <h1>为什么长文本理解应该变成一次“主动搜寻”</h1>
+    <div class="post-meta">2026 年 11 月 24 日 · 2 分钟读完 · 长上下文 · Agent · SCOUT</div>
+    <div class="prose">
+<p>大多数长文本方法都在优化同一件事：把更多内容塞进上下文，然后让模型读一遍。</p>
+<p>问题在于，<strong>对任何一个具体问题而言，真正有用的信息在整篇文档里都极其稀疏</strong>。一份上百页的财报里，支撑某句结论的可能只有两三个段落；剩下的内容不是噪声，而是与这个问题无关。让模型均匀地读完全部内容，等于把大部分算力花在了不需要读的地方。</p>
+<p>我们把这种默认做法带来的损失称为 <strong>Task-Agnostic Processing Trap</strong>：处理过程与任务无关。</p>
+<h3>换一个视角：把读文档变成找证据</h3>
+<p>SCOUT 的做法是把长文本理解改写成一个部分可观测下的目标导向搜寻过程：</p>
+<ul><li><strong>不是</strong>一次性读入全文，再从中抽取答案；</li><li><strong>而是</strong>在每一步判断「当前掌握的信息还缺什么」，然后去文档里找那一块。</li></ul>
+<p>关键设计是 <strong>state decoupling</strong>。一个不断增长的探索轨迹（procedural trace）会迅速污染上下文，让模型越来越难判断自己到底知道了什么。我们把它和<strong>认知状态</strong>（epistemic state）拆开：轨迹记录走过哪些路，认知状态只保留「已经确证了什么、还缺什么」，并且带出处。答案最终只从认知状态生成。</p>
+<h3>结果与代价</h3>
+<p>在 LOOGLE-V2 和 ∞Bench 上，这套方式的 accuracy–cost 曲线比前沿模型好，token 消耗最多降到约 1/8；上下文从 64K 扩到 2M 时，精度和成本都基本持平。</p>
+<p>代价也很明确：</p>
+<ol><li><strong>延迟</strong>变成多轮交互，不适合一次性的短查询；</li><li><strong>评测方式</strong>要重写，传统的「读完再问」指标衡量不了搜寻过程；</li><li>训练信号必须覆盖「该不该继续找」，这比训练一个抽取器难得多。</li></ol>
+<p>我更愿意把它看成一种<strong>成本结构的重新分配</strong>：把算力从「读没用的内容」挪到「判断还缺什么」。这个方向还有很多没解决的问题，比如什么时候该停止搜寻。</p>
+    </div>
+    <nav class="post-nav">
+<span></span>
+      <a href="/posts/if-on-fab.html" style="text-align:right"><span>Older</span>金融 Agent 的指令遵循：四个改动，和它们各自的代价</a>
+    </nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <span>© 2026 Zhenliang Zhang</span>
+  <nav>
+    <a href="mailto:zhenliang@stu.pku.edu.cn">Email</a>
+    <a href="https://github.com/XavierZhang2002">GitHub</a>
+    <a href="https://scholar.google.com/citations?user=5G8W6OcAAAAJ">Scholar</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</footer>
+</body>
+</html>

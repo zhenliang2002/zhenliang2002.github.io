@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>金融 Agent 的指令遵循：四个改动，和它们各自的代价 — Zhenliang Zhang</title>
+<meta name="description" content="FAB v2 主榜 +4.7 / +2.5 个百分点之后，我复盘了真正起作用的四个改动，以及它们各自交换掉的东西。">
+<link rel="canonical" href="https://zhenliang2002.github.io/posts/if-on-fab.html">
+<link rel="alternate" type="application/rss+xml" title="张珍梁" href="/feed.xml">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' fill='%23000'/%3E%3Ctext x='16' y='22' font-family='Helvetica,Arial' font-size='16' font-weight='600' fill='%23fff' text-anchor='middle'%3EZ%3C/text%3E%3C/svg%3E">
+<link rel="stylesheet" href="/assets/style.css">
+<meta property="og:title" content="金融 Agent 的指令遵循：四个改动，和它们各自的代价 — Zhenliang Zhang">
+<meta property="og:description" content="FAB v2 主榜 +4.7 / +2.5 个百分点之后，我复盘了真正起作用的四个改动，以及它们各自交换掉的东西。">
+<meta property="og:type" content="article">
+<meta property="og:url" content="https://zhenliang2002.github.io/posts/if-on-fab.html">
+</head>
+<body>
+<header class="site-header">
+  <div class="inner">
+    <a class="brand" href="/">Zhenliang Zhang <span>· 张珍梁</span></a>
+    <nav class="nav"><a href="/#writing">Writing</a><a href="/about.html">About</a><a href="/feed.xml">RSS</a></nav>
+  </div>
+</header>
+<main>
+  <article class="article">
+    <a class="back" href="/#writing">← Writing</a>
+    <h1>金融 Agent 的指令遵循：四个改动，和它们各自的代价</h1>
+    <div class="post-meta">2026 年 11 月 18 日 · 2 分钟读完 · 后训练 · 指令遵循 · 评测</div>
+    <div class="prose">
+<p>在百灵做金融 Agent 的指令遵循优化，最容易犯的错误是把「指标涨了」直接当成「方法对了」。我们最后在 FAB v2 主榜上拿到 Raw Average / Strict Pass 分别 +4.7 / +2.5 个百分点，在自建评测集上是 +5.4 / +3.1，IFSR 提升 6.3 个百分点。回头看，真正起作用的改动只有四个。</p>
+<h3>一、把口径约束写成可复用的协议</h3>
+<p>金融任务的难点不在知识，而在<strong>口径</strong>：同一个指标，不同题目要求的口径可能不同（是否含税、是否年化、按哪个财年）。</p>
+<p>我们的做法是把领域规则和口径转换编码成一个可复用的协议（CGA，Contract-Guided Augmentation），用它批量生成题目和评分标准。平均口径类型数从 2.39 涨到 3.56。</p>
+<p><strong>代价</strong>：生成的东西必须逐条校验，否则等于批量制造错误答案。</p>
+<h3>二、用 Teacher–Student 差异筛样本</h3>
+<p>不是所有样本都值得训。我们按轨迹合规性、证据一致性，以及 Teacher 与 Student 的能力差来筛：<strong>学生已经会的没价值，学生完全够不到的也没价值</strong>。</p>
+<p><strong>代价</strong>：这条规则很依赖 Teacher 的稳定性，Teacher 换版本就要重筛。</p>
+<h3>三、把「口径」从指令里拆出来</h3>
+<p>早期的指令把格式要求和内容要求混在一起，模型经常为了守格式而答错内容。拆分之后，格式约束走结构化输出，内容判断留给模型。</p>
+<p><strong>代价</strong>：两类约束冲突时，需要一条明确的优先级规则。</p>
+<h3>四、让消融成为流程的一部分</h3>
+<p>每个改动都跑一次去消融对照，而不是只看最终指标。这一步听起来理所当然，但它是我们最后能说清「谁在起作用」的唯一原因。</p>
+<p><strong>代价</strong>：训练成本大约翻倍。</p>
+<h3>一点题外话</h3>
+<p>指标提升 4.7 分，听上去不多。但在一个已经很强的基座上，<strong>每 1 分都意味着某类失败模式被系统性地消灭了一批</strong>。比分数更值得记录的是：每一分背后，你放弃了什么。</p>
+    </div>
+    <nav class="post-nav">
+<a href="/posts/active-foraging.html"><span>Newer</span>为什么长文本理解应该变成一次“主动搜寻”</a>
+      <a href="/posts/hello.html" style="text-align:right"><span>Older</span>开始写点东西</a>
+    </nav>
+  </article>
+</main>
+<footer class="site-footer">
+  <span>© 2026 Zhenliang Zhang</span>
+  <nav>
+    <a href="mailto:zhenliang@stu.pku.edu.cn">Email</a>
+    <a href="https://github.com/XavierZhang2002">GitHub</a>
+    <a href="https://scholar.google.com/citations?user=5G8W6OcAAAAJ">Scholar</a>
+    <a href="/feed.xml">RSS</a>
+  </nav>
+</footer>
+</body>
+</html>
