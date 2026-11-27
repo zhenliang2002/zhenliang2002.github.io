@@ -197,8 +197,7 @@ def layout(title, description, body, canonical="/", current=""):
 <title>{title}</title>
 {description_tag}
 <link rel="canonical" href="{site}{canonical}">
-<link rel="alternate" type="application/rss+xml" title="{title}" href="/feed.xml">
-<link rel="icon" href="{favicon}">
+<link rel="icon" type="image/svg+xml" href="/assets/mark.svg">
 <link rel="stylesheet" href="/assets/style.css">
 <meta property="og:title" content="{title}">
 {description_tag}
@@ -208,7 +207,7 @@ def layout(title, description, body, canonical="/", current=""):
 <body>
 <header class="site-header">
   <div class="inner">
-    <a class="brand" href="/">{title}</a>
+    <a class="brand" href="/"><img class="brand-mark" src="/assets/mark.svg" alt="" width="18" height="18">{title}</a>
     <nav class="nav">{nav}</nav>
   </div>
 </header>
@@ -216,7 +215,6 @@ def layout(title, description, body, canonical="/", current=""):
 <footer class="site-footer">
   <span>© {year}</span>
   <nav>
-    <a href="/feed.xml">RSS</a>
     <a href="/#writing">Writing</a>
   </nav>
 </footer>
@@ -278,6 +276,9 @@ def index_page(posts):
     <p class="empty">—</p>
   </section>"""
     body = """<main class="archive-main">
+  <figure class="hero-mark">
+    <img src="/assets/hero.svg" alt="" width="640" height="400">
+  </figure>
 {listing}
 </main>""".format(listing=listing)
     return layout(SITE["title"], "", body, "/")
@@ -316,34 +317,6 @@ def post_page(posts, index):
     )
 
 
-def feed(posts):
-    items = []
-    for post in posts:
-        url = "%s/posts/%s.html" % (SITE["url"], post["slug"])
-        items.append(
-            "  <item>\n    <title>%s</title>\n    <link>%s</link>\n    <guid>%s</guid>\n"
-            "    <pubDate>%s</pubDate>\n    <description>%s</description>\n  </item>"
-            % (
-                html.escape(post["title"]),
-                url,
-                url,
-                datetime.strptime(post["date"], "%Y-%m-%d").strftime("%a, %d %b %Y 00:00:00 +0800"),
-                html.escape(post["summary"]),
-            )
-        )
-    return """<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
-<channel>
-  <title>{title}</title>
-  <link>{site}</link>
-  <description>{title}</description>
-  <language>zh-CN</language>
-{items}
-</channel>
-</rss>
-""".format(title=SITE["title"], site=SITE["url"], items="\n".join(items))
-
-
 def sitemap(posts):
     urls = ["/"] + ["/posts/%s.html" % p["slug"] for p in posts]
     body = "".join("  <url><loc>%s%s</loc></url>\n" % (SITE["url"], u) for u in urls)
@@ -362,7 +335,6 @@ def main():
     write("index.html", index_page(posts))
     for i, post in enumerate(posts):
         write(os.path.join("posts", post["slug"] + ".html"), post_page(posts, i))
-    write("feed.xml", feed(posts))
     write("sitemap.xml", sitemap(posts))
     write(".nojekyll", "")
     print("built %d posts" % len(posts))

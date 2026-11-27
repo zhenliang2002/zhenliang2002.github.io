@@ -11,8 +11,9 @@ content/
 assets/style.css  唯一一份样式表
 build.py          生成器（Python 3.8+，仅标准库）
 index.html        生成物：首页
+assets/mark.svg   标识
+assets/hero.svg   首页插画
 posts/*.html      生成物：文章页
-feed.xml          生成物
 sitemap.xml       生成物
 ```
 
@@ -38,6 +39,8 @@ python build.py
 ```
 
 `main` 分支根目录即站点，`.nojekyll` 关闭 Jekyll，推送后自动发布。
+
+视觉：`assets/mark.svg`（标题旁标识与 favicon）与 `assets/hero.svg`（首页「夜航船」插画），单色、无位图。
 
 ## 设计
 

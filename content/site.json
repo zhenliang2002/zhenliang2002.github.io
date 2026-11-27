@@ -2,7 +2,6 @@
   "title": "Notes",
   "url": "https://zhenliang2002.github.io",
   "nav": [
-    { "label": "Writing", "href": "/#writing" },
-    { "label": "RSS", "href": "/feed.xml" }
+    { "label": "Writing", "href": "/#writing" }
   ]
 }

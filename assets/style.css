@@ -66,10 +66,15 @@ button:focus-visible {
 }
 
 .brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
   font-size: 15px;
   letter-spacing: -.01em;
   color: var(--fg);
 }
+
+.brand-mark { display: block; opacity: .9; }
 
 .brand span { color: var(--fg-3); }
 
@@ -374,7 +379,19 @@ main { width: var(--wrap); margin: 0 auto; }
 
 /* ── archive-first layout ─────────────────── */
 
-.archive-main { padding: 84px 0 120px; }
+.archive-main { padding: 24px 0 120px; }
+
+.hero-mark {
+  margin: 0 0 40px;
+  display: flex;
+  justify-content: flex-start;
+}
+
+.hero-mark img {
+  width: min(520px, 56vw);
+  height: auto;
+  opacity: .96;
+}
 
 .archive .section-head { border-top: none; padding-top: 0; }
 

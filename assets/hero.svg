@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 360" role="img" aria-label="夜航船">
+  <defs>
+    <radialGradient id="glow" cx="50%" cy="50%" r="50%">
+      <stop offset="50%" stop-color="#ffffff" stop-opacity=".13"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </radialGradient>
+    <radialGradient id="disc" cx="40%" cy="34%" r="64%">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity=".10"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity=".015"/>
+    </radialGradient>
+    <linearGradient id="horizon" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#ffffff" stop-opacity="0"/>
+      <stop offset="24%" stop-color="#ffffff" stop-opacity=".34"/>
+      <stop offset="50%" stop-color="#ffffff" stop-opacity=".52"/>
+      <stop offset="76%" stop-color="#ffffff" stop-opacity=".34"/>
+      <stop offset="100%" stop-color="#ffffff" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <circle cx="320" cy="102" r="146" fill="url(#glow)"/>
+  <circle cx="320" cy="102" r="80" fill="url(#disc)"/>
+  <circle cx="320" cy="102" r="80" fill="none" stroke="#ffffff" stroke-opacity=".52" stroke-width="1"/>
+
+  <path d="M96 250H544" stroke="url(#horizon)" stroke-width="1"/>
+
+  <path d="M276 246H364L351 261Q320 269 289 261Z" fill="#ffffff" fill-opacity=".95"/>
+  <path d="M320 190V246" stroke="#ffffff" stroke-opacity=".9" stroke-width="1.5"/>
+  <path d="M322 194V244L362 244Z" fill="#ffffff" fill-opacity=".22" stroke="#ffffff" stroke-opacity=".8" stroke-width="1"/>
+  <path d="M318 201V244L285 244Z" fill="#ffffff" fill-opacity=".09" stroke="#ffffff" stroke-opacity=".5" stroke-width="1"/>
+  <circle cx="320" cy="252" r="2" fill="#ffffff" fill-opacity=".95"/>
+
+  <path d="M262 276H378" stroke="#ffffff" stroke-opacity=".13" stroke-width="1"/>
+  <path d="M282 288H358" stroke="#ffffff" stroke-opacity=".085" stroke-width="1"/>
+  <path d="M300 298H340" stroke="#ffffff" stroke-opacity=".05" stroke-width="1"/>
+</svg>
